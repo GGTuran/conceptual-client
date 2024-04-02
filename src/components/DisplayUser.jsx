@@ -1,6 +1,7 @@
 // import React from 'react';
 
-import { useLoaderData } from "react-router-dom";
+import { useState } from "react";
+import { Link, useLoaderData } from "react-router-dom";
 
 
 
@@ -8,6 +9,7 @@ const DisplayUser = () => {
 
 
     const users = useLoaderData();
+    const [updatedUser, setUpdatedUser] = useState(users);
     console.log(users);
 
     const handleDelete = _id =>{
@@ -21,6 +23,8 @@ const DisplayUser = () => {
             if(data.deletedCount > 0){
                 alert("User Deleted successfully");
             }
+            const filteredData = updatedUser.filter((item) => item._id !== _id);
+            setUpdatedUser(filteredData);
         })
     }
 
@@ -28,12 +32,15 @@ const DisplayUser = () => {
         <div>
         <h1>User</h1>
         {
-            users.map(user => (
+            updatedUser.map(user => (
                 <div key={user._id}>
                     <h1>{user.name}</h1>
                     <span>{user.email}</span>
                     <br />
                     <button onClick={() => handleDelete(user._id)} type="submit">Delete</button>
+                    <Link to={`/users/${user._id}`}>
+                    <button type="submit">Update</button>
+                    </Link>
 
                 </div>
             ))
